@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<head>
+    <title>TO 小湘</title>
+</head>
+
+<body>
+<canvas id="canvas"></canvas>
+<style type="text/css">
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+</style>
+<script type="text/javascript">
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    var texts = 'I LOVE U'.split('');
+    var fontSize = 16;
+    var columns = canvas.width / fontSize;
+    var drops = [];
+    for (var x = 0; x < columns; x++) {
+        drops[x] = 1;
+    }
+
+    function draw() {
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#e8a2c2';
+        ctx.font = fontSize + 'px arial';
+        for (var i = 0; i < drops.length; i++) {
+            var text = texts[Math.floor(Math.random() * texts.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+    setInterval(draw, 33);
+</script>
+</body>
+</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE> love</TITLE>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="UTF-8">
+    <style>
+        html,
+        body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: rgb(234, 111, 111);
+        }
+
+        canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        #child {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -75px;
+            margin-left: -100px;
+        }
+
+        h4 {
+            font-family: "STKaiti";
+            font-size: 40px;
+            color: #e386b1;
+            position: relative;
+            top: -70px;
+            left: -65px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="child">
+    <h4>  XXXXXდდXXXX</h4>
+</div>
+<canvas id="LOVEEE"></canvas>
+<script>
+    var settings = {
+        particles: {
+            length: 600,
+            duration: 2,
+            velocity: 100,
+            effect: -0.5,
+            size: 40
+        }
+    };
+
+    (function () {
+        var b = 0;
+        var c = ["ms", "moz", "webkit", "o"];
+        for (var a = 0; a < c.length &&!window.requestAnimationFrame; ++a) {
+            window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"];
+            window.cancelAnimationFrame = window[c[a] + "CancelAnimationFrame"] || window[c[a] + "CancelRequestAnimationFrame"]
+        }
+        if (!window.requestAnimationFrame) {
+            window.requestAnimationFrame = function (h, e) {
+                var d = new Date().getTime();
+                var f = Math.max(0, 16 - (d - b));
+                var g = window.setTimeout(function () {
+                    h(d + f)
+                }, f);
+                b = d + f;
+                return g
+            }
+        }
+        if (!window.cancelAnimationFrame) {
+            window.cancelAnimationFrame = function (d) {
+                clearTimeout(d)
+            }
+        }
+    })();
+
+    var XIAOXIANG = (function () {
+        function XIAOXIANG(x, y) {
+            this.x = (typeof x!== 'undefined')? x : 0;
+            this.y = (typeof y!== 'undefined')? y : 0;
+        }
+        XIAOXIANG.prototype.clone = function () {
+            return new XIAOXIANG(this.x, this.y);
+        };
+        XIAOXIANG.prototype.length = function (length) {
+            if (typeof length == 'undefined')
+                return Math.sqrt(this.x * this.x + this.y * this.y);
+            this.normalize();
+            this.x *= length;
+            this.y *= length;
+            return this;
+        };
+        XIAOXIANG.prototype.normalize = function () {
+            var length = this.length();
+            this.x /= length;
+            this.y /= length;
+            return this;
+        };
+        return XIAOXIANG;
+    })();
+
+    var Particle = (function () {
+        function Particle() {
+            this.position = new XIAOXIANG();
+            this.velocity = new XIAOXIANG();
+            this.acceleration = new XIAOXIANG();
+            this.age = 0;
+        }
+        Particle.prototype.initialize = function (x, y, dx, dy) {
+            this.position.x = x;
+            this.position.y = y;
+            this.velocity.x = dx;
+            this.velocity.y = dy;
+            this.acceleration.x = dx * settings.particles.effect;
+            this.acceleration.y = dy * settings.particles.effect;
+            this.age = 0;
+        };
+        Particle.prototype.update = function (DTT) {
+            this.position.x += this.velocity.x * DTT;
+            this.position.y += this.velocity.y * DTT;
+            this.velocity.x += this.acceleration.x * DTT;
+            this.velocity.y += this.acceleration.y * DTT;
+            this.age += DTT;
+        };
+        Particle.prototype.draw = function (context, image) {
+            function ease(t) {
+                return (--t) * t * t + 1;
+            }
+            var size = image.width * ease(this.age / settings.particles.duration);
+            context.globalAlpha = 1 - this.age / settings.particles.duration;
+            context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
+        };
+        return Particle;
+    })();
+    function draw() {
+        var perspective = 300;
+        var centerX = canvas.width / 2;
+        var centerY = canvas.height / 2;
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.scale(1, -1);
+        for (var y = -centerY; y < centerY; y++) {
+            var scale = perspective / (perspective + y);
+            ctx.scale(scale, scale);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(-centerX, -centerY, canvas.width, canvas.height);
+            ctx.fillStyle = '#d6649c';
+            ctx.font = fontSize + 'px arial';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 5;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            for (var i = 0; i < drops.length; i++) {
+                var text = texts[Math.floor(Math.random() * texts.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+            ctx.restore();
+        }
+    }
+
+    Particle.prototype.draw = function (context, image) {
+        function ease(t) {
+            return (--t) * t * t + 1;
+        }
+        var size = image.width * ease(this.age / settings.particles.duration);
+        context.globalAlpha = 1 - this.age / settings.particles.duration;
+        context.shadowColor = 'rgba(232,224,224,0.5)';
+        context.shadowBlur = 3;
+        context.shadowOffsetX = 1;
+        context.shadowOffsetY = 1;
+        context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
+    };
+    var ParticlePool = (function () {
+        var particles,
+            DIYICI = 0,
+            firstFree = 0,
+            duration = settings.particles.duration;
+
+        function ParticlePool(length) {
+            particles = new Array(length);
+            for (var i = 0; i < particles.length; i++)
+                particles[i] = new Particle();
+        }
+        ParticlePool.prototype.add = function (x, y, dx, dy) {
+            particles[firstFree].initialize(x, y, dx, dy);
+            firstFree++;
+            if (firstFree == particles.length) firstFree = 0;
+            if (DIYICI == firstFree) DIYICI++;
+            if (DIYICI == particles.length) DIYICI = 0;
+        };
+        ParticlePool.prototype.update = function (DTT) {
+            var i;
+            if (DIYICI < firstFree) {
+                for (i = DIYICI; i < firstFree; i++)
+                    particles[i].update(DTT);
+            }
+            if (firstFree < DIYICI) {
+                for (i = DIYICI; i < particles.length; i++)
+                    particles[i].update(DTT);
+                for (i = 0; i < firstFree; i++)
+                    particles[i].update(DTT);
+            }
+            while (particles[DIYICI].age >= duration && DIYICI!= firstFree) {
+                DIYICI++;
+                if (DIYICI == particles.length) DIYICI = 0;
+            }
+        };
+        ParticlePool.prototype.draw = function (context, image) {
+            if (DIYICI < firstFree) {
+                for (i = DIYICI; i < firstFree; i++)
+                    particles[i].draw(context, image);
+            }
+            if (firstFree < DIYICI) {
+                for (i = DIYICI; i < particles.length; i++)
+                    particles[i].draw(context, image);
+                for (i = 0; i < firstFree; i++)
+                    particles[i].draw(context, image);
+            }
+        };
+        return ParticlePool;
+    })();
+
+    (function (canvas) {
+        var context = canvas.getContext('2d');
+        var particles = new ParticlePool(settings.particles.length);
+        var particleRate = settings.particles.length / settings.particles.duration;
+        var time;
+
+        function XIAOXIANGOnHeart(t) {
+            return new XIAOXIANG(
+                160 * Math.pow(Math.sin(t), 3),
+                130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
+            );
+        }
+
+        var image = (function () {
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.width = settings.particles.size;
+            canvas.height = settings.particles.size;
+            function to(t) {
+                var XIAOXIANG = XIAOXIANGOnHeart(t);
+                XIAOXIANG.x = settings.particles.size / 2 + XIAOXIANG.x * settings.particles.size / 350;
+                XIAOXIANG.y = settings.particles.size / 2 - XIAOXIANG.y * settings.particles.size / 350;
+                return XIAOXIANG;
+            }
+            context.beginPath();
+            var t = -Math.PI;
+            var XIAOXIANG = to(t);
+            context.moveTo(XIAOXIANG.x, XIAOXIANG.y);
+            while (t < Math.PI) {
+                t += 0.01;
+                XIAOXIANG = to(t);
+                context.lineTo(XIAOXIANG.x, XIAOXIANG.y);
+            }
+            context.closePath();
+            context.fillStyle = '#e47daa';
+            context.fill();
+            var image = new Image();
+            image.src = canvas.toDataURL();
+            return image;
+        })();
+
+        function render() {
+            requestAnimationFrame(render);
+            var newTime = new Date().getTime() / 1000;
+            var DTT = newTime - (time || newTime);
+            time = newTime;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var amount = particleRate * DTT;
+            for (var i = 0; i < amount; i++) {
+                var pos = XIAOXIANGOnHeart(Math.PI - 2 * Math.PI * Math.random());
+                var dir = pos.clone().length(settings.particles.velocity);
+                particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
+            }
+            particles.update(DTT);
+            particles.draw(context, image);
+        }
+
+        function onkk() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }
+        window.onkk = onkk;
+
+        setTimeout(function () {
+            onkk();
+            render();
+        }, 10);
+    })(document.getElementById('LOVEEE'));
+</script>
+</body>
+</HTML>
